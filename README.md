@@ -17,3 +17,5 @@ This version uses GDI+ and windows forms.
 This version uses a simple shader to display the terrain in 3D.
 
 ![godot](/imgs/simplex_noise_godot.png)
+![godot](/imgs/simplex_noise_godot2.png)
+
