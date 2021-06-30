@@ -58,7 +58,7 @@ namespace SimplexNoiseTest
             var maxAmp = 0.0f;
             var amp = 1.0f;
             var freq = scale;
-            var noises = new List<float[,]>();
+            var result = new float[w, h];
 
             for (int i = 0; i < num_iterations; ++i)
             {
@@ -68,26 +68,13 @@ namespace SimplexNoiseTest
                 {
                     for (int y = 0; y < h; y++)
                     {
-                        noise[x, y] = (noise[x, y] / 255) * amp;
+                        result[x, y] += (noise[x, y] / 255) * amp;
                     }
                 }
-                noises.Add(noise);
+                
                 maxAmp += amp;
                 amp *= persistence;
                 freq *= 2;
-            }
-
-            float[,] result = new float[w, h];
-            for (int i = 0; i < num_iterations; ++i)
-            {
-                var noise = noises[i];
-                for (int x = 0; x < w; x++)
-                {
-                    for (int y = 0; y < h; y++)
-                    {
-                        result[x, y] += noise[x, y];                        
-                    }
-                }
             }
 
             for (int x = 0; x < w; x++)
