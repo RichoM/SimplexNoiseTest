@@ -1,0 +1,28 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://terrain_sphere.shader" type="Shader" id=1]
+
+
+[sub_resource type="OpenSimplexNoise" id=1]
+octaves = 4
+
+[sub_resource type="NoiseTexture" id=2]
+width = 1024
+height = 1024
+seamless = true
+noise = SubResource( 1 )
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/offset = Vector2( 0, 0 )
+shader_param/water = Color( 0.0901961, 0.482353, 0.768627, 1 )
+shader_param/beach = Color( 0.890196, 0.882353, 0.329412, 1 )
+shader_param/forest = Color( 0.141176, 0.678431, 0.235294, 1 )
+shader_param/mountain = Color( 0.243137, 0.235294, 0.223529, 1 )
+shader_param/snow = Color( 0.996078, 0.996078, 0.996078, 1 )
+shader_param/water_threshold = 0.0
+shader_param/beach_threshold = 0.466
+shader_param/forest_threshold = 0.498
+shader_param/mountain_threshold = 0.55
+shader_param/snow_threshold = 0.645
+shader_param/noise_sampler = SubResource( 2 )
