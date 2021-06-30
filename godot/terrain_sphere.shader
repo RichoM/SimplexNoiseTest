@@ -20,13 +20,18 @@ void vertex() {
 	
 	float disp = 0.0;
 	if (noise.r > snow_threshold) {
-		disp = (noise.r - beach_threshold) * 3.0;
-	} else if (noise.r > mountain_threshold) {
 		disp = (noise.r - beach_threshold) * 2.0;
+	} else if (noise.r > mountain_threshold) {
+		disp = (noise.r - beach_threshold) * 1.25;
 	} else if (noise.r > forest_threshold) {
 		disp = (noise.r - beach_threshold) * 1.15;
 	} else if (noise.r > beach_threshold) {
 		disp = (noise.r - beach_threshold) * 1.05;
+	}
+	
+	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
+		// Estamos en los polos
+		disp = 0.015 * UV.y + 0.015;
 	}
 	float x = VERTEX.x;
 	float y = VERTEX.y;
@@ -43,7 +48,9 @@ void vertex() {
 	
 }
 
+
 void fragment() {
+	
 	vec4 noise = texture(noise_sampler, UV);
 	vec4 color = vec4(1.0);
 	if (noise.x > snow_threshold) {
@@ -58,4 +65,10 @@ void fragment() {
 		color = water;
 	}
 	ALBEDO = noise.rgb * color.rgb;
+	
+	noise /= 5.0;
+	if (UV.y < noise.x || UV.y > 1.0 - noise.x) 
+	{
+		ALBEDO = snow.rgb * 0.9;
+	}
 }

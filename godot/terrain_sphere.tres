@@ -2,8 +2,8 @@
 
 [ext_resource path="res://terrain_sphere.shader" type="Shader" id=1]
 
-
 [sub_resource type="OpenSimplexNoise" id=1]
+seed = 3
 octaves = 4
 
 [sub_resource type="NoiseTexture" id=2]
@@ -23,6 +23,6 @@ shader_param/snow = Color( 0.996078, 0.996078, 0.996078, 1 )
 shader_param/water_threshold = 0.0
 shader_param/beach_threshold = 0.466
 shader_param/forest_threshold = 0.498
-shader_param/mountain_threshold = 0.55
+shader_param/mountain_threshold = 0.555
 shader_param/snow_threshold = 0.645
 shader_param/noise_sampler = SubResource( 2 )

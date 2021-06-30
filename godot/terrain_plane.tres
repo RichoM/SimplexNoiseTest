@@ -2,7 +2,6 @@
 
 [ext_resource path="res://terrain_plane.shader" type="Shader" id=1]
 
-
 [sub_resource type="OpenSimplexNoise" id=1]
 octaves = 4
 
