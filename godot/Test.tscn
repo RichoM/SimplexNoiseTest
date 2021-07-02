@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://terrain_plane.tres" type="Material" id=1]
 [ext_resource path="res://terrain_sphere.tres" type="Material" id=2]
@@ -42,13 +42,13 @@ vec3 move(vec3 pt, float disp) {
 }
 
 void vertex() {
-	float disp = texture(clouds_texture, UV).r * .25;
+	float disp = texture(clouds_texture, vec2(UV.y*2.35, UV.x + TIME*-0.015)).r;
 	
-	VERTEX = move(VERTEX, disp * 1.25);
+	VERTEX = move(VERTEX, disp * 0.25);
 }
 
 void fragment() {
-	vec3 albedo = texture(clouds_texture, UV + TIME*-0.005).rgb;
+	vec3 albedo = texture(clouds_texture, vec2(UV.y*2.35, UV.x + TIME*-0.025)).rgb;
 	ALBEDO = albedo;
 	ALPHA = smoothstep(0.45, 0.65, albedo.g) * 0.35;
 	EMISSION = vec3(1.0);
@@ -126,6 +126,14 @@ shader_param/uv2_scale = Vector3( 1, 1, 1 )
 shader_param/uv2_offset = Vector3( 0, 0, 0 )
 shader_param/texture_normal = SubResource( 6 )
 
+[sub_resource type="ProceduralSky" id=13]
+ground_bottom_color = Color( 0, 0.00784314, 0.109804, 1 )
+ground_horizon_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="Environment" id=14]
+background_mode = 2
+background_sky = SubResource( 13 )
+
 [node name="Spatial" type="Spatial"]
 
 [node name="flatearth" type="MeshInstance" parent="."]
@@ -144,7 +152,7 @@ material/0 = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="clouds" type="MeshInstance" parent="littleplanet"]
-transform = Transform( -0.801712, -0.320538, 0.504494, 0.309686, -0.944677, -0.108079, 0.511227, 0.0695867, 0.856624, 0, 0, 0 )
+transform = Transform( -0.863287, -0.014908, 0.504494, -0.0460108, -0.993078, -0.108079, 0.502613, -0.116515, 0.856624, 0, 0, 0 )
 mesh = SubResource( 8 )
 material/0 = SubResource( 10 )
 
@@ -156,3 +164,6 @@ material/0 = SubResource( 7 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.809017, 0.587785, 0, -0.587785, 0.809017, 0, 13.65, 5 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 14 )
