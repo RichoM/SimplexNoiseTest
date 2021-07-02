@@ -125,3 +125,4 @@ transform = Transform( 1, 0, 0, 0, 0.809017, 0.587785, 0, -0.587785, 0.809017, -
 environment = SubResource( 10 )
 
 [node name="GUI" parent="." instance=ExtResource( 5 )]
+planet = NodePath("../littleplanet")

@@ -1,11 +1,25 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://GUI.gd" type="Script" id=1]
 
 [node name="GUI" type="Control"]
 anchor_bottom = 1.0
 margin_right = 334.0
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+seed_input = NodePath("Panel/Controls/SeedControl/seed")
+water_threshold = NodePath("Panel/Controls/WaterControl/right/water_threshold")
+water_color = NodePath("Panel/Controls/WaterControl/right/water_color")
+beach_threshold = NodePath("Panel/Controls/BeachControl/right/beach_threshold")
+beach_color = NodePath("Panel/Controls/BeachControl/right/beach_color")
+forest_threshold = NodePath("Panel/Controls/ForestControl/right/forest_threshold")
+forest_color = NodePath("Panel/Controls/ForestControl/right/forest_color")
+mountain_threshold = NodePath("Panel/Controls/MountainControl/right/mountain_threshold")
+mountain_color = NodePath("Panel/Controls/MountainControl/right/mountain_color")
+snow_threshold = NodePath("Panel/Controls/SnowControl/right/snow_threshold")
+snow_color = NodePath("Panel/Controls/SnowControl/right/show_color")
 
 [node name="Panel" type="ColorRect" parent="."]
 anchor_right = 1.0
@@ -56,7 +70,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="value" type="LineEdit" parent="Panel/Controls/SeedControl"]
+[node name="seed" type="LineEdit" parent="Panel/Controls/SeedControl"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 24.0
@@ -104,13 +118,13 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
-[node name="threshold" type="HSlider" parent="Panel/Controls/WaterControl/right"]
+[node name="water_threshold" type="HSlider" parent="Panel/Controls/WaterControl/right"]
 margin_right = 158.0
 margin_bottom = 16.0
 max_value = 1.0
 step = 0.001
 
-[node name="color" type="ColorPickerButton" parent="Panel/Controls/WaterControl/right"]
+[node name="water_color" type="ColorPickerButton" parent="Panel/Controls/WaterControl/right"]
 margin_top = 16.0
 margin_right = 158.0
 margin_bottom = 36.0
@@ -152,13 +166,13 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
-[node name="threshold" type="HSlider" parent="Panel/Controls/BeachControl/right"]
+[node name="beach_threshold" type="HSlider" parent="Panel/Controls/BeachControl/right"]
 margin_right = 158.0
 margin_bottom = 16.0
 max_value = 1.0
 step = 0.001
 
-[node name="color" type="ColorPickerButton" parent="Panel/Controls/BeachControl/right"]
+[node name="beach_color" type="ColorPickerButton" parent="Panel/Controls/BeachControl/right"]
 margin_top = 16.0
 margin_right = 158.0
 margin_bottom = 36.0
@@ -200,13 +214,13 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
-[node name="threshold" type="HSlider" parent="Panel/Controls/ForestControl/right"]
+[node name="forest_threshold" type="HSlider" parent="Panel/Controls/ForestControl/right"]
 margin_right = 158.0
 margin_bottom = 16.0
 max_value = 1.0
 step = 0.001
 
-[node name="color" type="ColorPickerButton" parent="Panel/Controls/ForestControl/right"]
+[node name="forest_color" type="ColorPickerButton" parent="Panel/Controls/ForestControl/right"]
 margin_top = 16.0
 margin_right = 158.0
 margin_bottom = 36.0
@@ -248,13 +262,13 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
-[node name="threshold" type="HSlider" parent="Panel/Controls/MountainControl/right"]
+[node name="mountain_threshold" type="HSlider" parent="Panel/Controls/MountainControl/right"]
 margin_right = 158.0
 margin_bottom = 16.0
 max_value = 1.0
 step = 0.001
 
-[node name="color" type="ColorPickerButton" parent="Panel/Controls/MountainControl/right"]
+[node name="mountain_color" type="ColorPickerButton" parent="Panel/Controls/MountainControl/right"]
 margin_top = 16.0
 margin_right = 158.0
 margin_bottom = 36.0
@@ -296,16 +310,27 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
-[node name="threshold" type="HSlider" parent="Panel/Controls/SnowControl/right"]
+[node name="snow_threshold" type="HSlider" parent="Panel/Controls/SnowControl/right"]
 margin_right = 158.0
 margin_bottom = 16.0
 max_value = 1.0
 step = 0.001
 
-[node name="color" type="ColorPickerButton" parent="Panel/Controls/SnowControl/right"]
+[node name="show_color" type="ColorPickerButton" parent="Panel/Controls/SnowControl/right"]
 margin_top = 16.0
 margin_right = 158.0
 margin_bottom = 36.0
 flat = true
 color = Color( 1, 1, 1, 1 )
 edit_alpha = false
+[connection signal="text_entered" from="Panel/Controls/SeedControl/seed" to="." method="_on_seed_text_entered"]
+[connection signal="value_changed" from="Panel/Controls/WaterControl/right/water_threshold" to="." method="_on_water_threshold_value_changed"]
+[connection signal="color_changed" from="Panel/Controls/WaterControl/right/water_color" to="." method="_on_water_color_changed"]
+[connection signal="value_changed" from="Panel/Controls/BeachControl/right/beach_threshold" to="." method="_on_beach_threshold_value_changed"]
+[connection signal="color_changed" from="Panel/Controls/BeachControl/right/beach_color" to="." method="_on_beach_color_changed"]
+[connection signal="value_changed" from="Panel/Controls/ForestControl/right/forest_threshold" to="." method="_on_forest_threshold_value_changed"]
+[connection signal="color_changed" from="Panel/Controls/ForestControl/right/forest_color" to="." method="_on_forest_color_changed"]
+[connection signal="value_changed" from="Panel/Controls/MountainControl/right/mountain_threshold" to="." method="_on_mountain_threshold_value_changed"]
+[connection signal="color_changed" from="Panel/Controls/MountainControl/right/mountain_color" to="." method="_on_mountain_color_changed"]
+[connection signal="value_changed" from="Panel/Controls/SnowControl/right/snow_threshold" to="." method="_on_snow_threshold_value_changed"]
+[connection signal="color_changed" from="Panel/Controls/SnowControl/right/show_color" to="." method="_on_show_color_changed"]
