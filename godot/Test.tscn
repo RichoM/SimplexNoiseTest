@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://terrain_plane.tres" type="Material" id=1]
 [ext_resource path="res://terrain_sphere.tres" type="Material" id=2]
@@ -14,6 +14,56 @@ radius = 4.0
 height = 8.0
 radial_segments = 128
 rings = 64
+
+[sub_resource type="SphereMesh" id=8]
+radius = 3.0
+height = 6.0
+
+[sub_resource type="Shader" id=9]
+code = "shader_type spatial;
+
+uniform sampler2D clouds_texture;
+
+
+vec3 move(vec3 pt, float disp) {	
+	float x = pt.x;
+	float y = pt.y;
+	float z = pt.z;
+	
+	float r = sqrt(x*x + y*y + z*z);
+	float i = acos(z/r);
+	float a = atan(y, x);
+	
+	r += disp;
+	pt.x = r * cos(a) * sin(i);
+	pt.y = r * sin(a) * sin(i);
+	pt.z = r * cos(i);
+	return pt;
+}
+
+void vertex() {
+	float disp = texture(clouds_texture, UV).r * .25;
+	
+	VERTEX = move(VERTEX, disp * 1.25);
+}
+
+void fragment() {
+	vec3 albedo = texture(clouds_texture, UV + TIME*-0.005).rgb;
+	ALBEDO = albedo;
+	ALPHA = smoothstep(0.45, 0.65, albedo.g) * 0.35;
+	EMISSION = vec3(1.0);
+}
+"
+
+[sub_resource type="OpenSimplexNoise" id=11]
+
+[sub_resource type="NoiseTexture" id=12]
+seamless = true
+noise = SubResource( 11 )
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
+shader_param/clouds_texture = SubResource( 12 )
 
 [sub_resource type="SphereMesh" id=3]
 
@@ -93,10 +143,16 @@ mesh = SubResource( 2 )
 material/0 = ExtResource( 2 )
 script = ExtResource( 3 )
 
+[node name="clouds" type="MeshInstance" parent="littleplanet"]
+transform = Transform( -0.801712, -0.320538, 0.504494, 0.309686, -0.944677, -0.108079, 0.511227, 0.0695867, 0.856624, 0, 0, 0 )
+mesh = SubResource( 8 )
+material/0 = SubResource( 10 )
+
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.87739, 10.0006, 0 )
+visible = false
 mesh = SubResource( 3 )
 material/0 = SubResource( 7 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 0.999975, -0.00708598, 0, 0.00637322, 0.89939, 0.4371, -0.00309728, -0.437089, 0.899413, 0, 12.7446, 6.16895 )
+transform = Transform( 1, 0, 0, 0, 0.809017, 0.587785, 0, -0.587785, 0.809017, 0, 13.65, 5 )
