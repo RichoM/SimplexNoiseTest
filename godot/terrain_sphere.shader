@@ -33,6 +33,7 @@ void vertex() {
 	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
 		//disp = 0.015 * UV.y + 0.055;
 		disp += .075;
+		disp = min(disp, 0.15);
 	}
 	float x = VERTEX.x;
 	float y = VERTEX.y;
