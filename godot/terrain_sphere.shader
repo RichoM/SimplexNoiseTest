@@ -31,8 +31,8 @@ void vertex() {
 	}
 	
 	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
-		// Estamos en los polos
-		disp = 0.015 * UV.y + 0.055;
+		//disp = 0.015 * UV.y + 0.055;
+		disp += .075;
 	}
 	float x = VERTEX.x;
 	float y = VERTEX.y;
@@ -85,8 +85,16 @@ void fragment() {
 	if (UV.y < noise.x || UV.y > 1.0 - noise.x) 
 	{
 		ALBEDO = snow.rgb * 0.9;
-		NORMALMAP_DEPTH = 11.0;
+		//NORMALMAP_DEPTH = 11.0 * (1.0 - pow(abs(sin(3.14159*(UV.y-0.5))), 0.5));
+		if (UV.y > 0.5) {
+			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, (UV.y*0.450));
+		} else {
+			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, ((1.0-UV.y)*0.450));
+		}
+		//NORMALMAP_DEPTH = 0.0;
 		NORMALMAP = texture(noise_normal, UV).rgb;
 		METALLIC = 0.0;
+		ROUGHNESS = 0.0;
+		EMISSION = vec3(.01);
 	}
 }
