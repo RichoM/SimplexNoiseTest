@@ -1,0 +1,311 @@
+[gd_scene format=2]
+
+[node name="GUI" type="Control"]
+anchor_bottom = 1.0
+margin_right = 334.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+color = Color( 0, 0, 0, 0.14902 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Controls" type="VBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = 6.0
+custom_constants/separation = 12
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RandomizeButton" type="Button" parent="Panel/Controls"]
+margin_right = 320.0
+margin_bottom = 20.0
+text = "Randomize"
+
+[node name="SeedControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 32.0
+margin_right = 320.0
+margin_bottom = 56.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="Panel/Controls/SeedControl"]
+margin_right = 158.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "Seed:"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="LineEdit" parent="Panel/Controls/SeedControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "0"
+align = 2
+caret_blink = true
+caret_blink_speed = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaterControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 68.0
+margin_right = 320.0
+margin_bottom = 104.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="MarginContainer" parent="Panel/Controls/WaterControl"]
+margin_right = 158.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+
+[node name="label" type="Label" parent="Panel/Controls/WaterControl/left"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Water:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="right" type="VBoxContainer" parent="Panel/Controls/WaterControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="threshold" type="HSlider" parent="Panel/Controls/WaterControl/right"]
+margin_right = 158.0
+margin_bottom = 16.0
+max_value = 1.0
+step = 0.001
+
+[node name="color" type="ColorPickerButton" parent="Panel/Controls/WaterControl/right"]
+margin_top = 16.0
+margin_right = 158.0
+margin_bottom = 36.0
+flat = true
+color = Color( 1, 1, 1, 1 )
+edit_alpha = false
+
+[node name="BeachControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 116.0
+margin_right = 320.0
+margin_bottom = 152.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="MarginContainer" parent="Panel/Controls/BeachControl"]
+margin_right = 158.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+
+[node name="label" type="Label" parent="Panel/Controls/BeachControl/left"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Beach:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="right" type="VBoxContainer" parent="Panel/Controls/BeachControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="threshold" type="HSlider" parent="Panel/Controls/BeachControl/right"]
+margin_right = 158.0
+margin_bottom = 16.0
+max_value = 1.0
+step = 0.001
+
+[node name="color" type="ColorPickerButton" parent="Panel/Controls/BeachControl/right"]
+margin_top = 16.0
+margin_right = 158.0
+margin_bottom = 36.0
+flat = true
+color = Color( 1, 1, 1, 1 )
+edit_alpha = false
+
+[node name="ForestControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 164.0
+margin_right = 320.0
+margin_bottom = 200.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="MarginContainer" parent="Panel/Controls/ForestControl"]
+margin_right = 158.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+
+[node name="label" type="Label" parent="Panel/Controls/ForestControl/left"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Forest:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="right" type="VBoxContainer" parent="Panel/Controls/ForestControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="threshold" type="HSlider" parent="Panel/Controls/ForestControl/right"]
+margin_right = 158.0
+margin_bottom = 16.0
+max_value = 1.0
+step = 0.001
+
+[node name="color" type="ColorPickerButton" parent="Panel/Controls/ForestControl/right"]
+margin_top = 16.0
+margin_right = 158.0
+margin_bottom = 36.0
+flat = true
+color = Color( 1, 1, 1, 1 )
+edit_alpha = false
+
+[node name="MountainControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 212.0
+margin_right = 320.0
+margin_bottom = 248.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="MarginContainer" parent="Panel/Controls/MountainControl"]
+margin_right = 158.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+
+[node name="label" type="Label" parent="Panel/Controls/MountainControl/left"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Mountain:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="right" type="VBoxContainer" parent="Panel/Controls/MountainControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="threshold" type="HSlider" parent="Panel/Controls/MountainControl/right"]
+margin_right = 158.0
+margin_bottom = 16.0
+max_value = 1.0
+step = 0.001
+
+[node name="color" type="ColorPickerButton" parent="Panel/Controls/MountainControl/right"]
+margin_top = 16.0
+margin_right = 158.0
+margin_bottom = 36.0
+flat = true
+color = Color( 1, 1, 1, 1 )
+edit_alpha = false
+
+[node name="SnowControl" type="HBoxContainer" parent="Panel/Controls"]
+margin_top = 260.0
+margin_right = 320.0
+margin_bottom = 296.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="MarginContainer" parent="Panel/Controls/SnowControl"]
+margin_right = 158.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+
+[node name="label" type="Label" parent="Panel/Controls/SnowControl/left"]
+margin_top = 2.0
+margin_right = 156.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Snow:"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="right" type="VBoxContainer" parent="Panel/Controls/SnowControl"]
+margin_left = 162.0
+margin_right = 320.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="threshold" type="HSlider" parent="Panel/Controls/SnowControl/right"]
+margin_right = 158.0
+margin_bottom = 16.0
+max_value = 1.0
+step = 0.001
+
+[node name="color" type="ColorPickerButton" parent="Panel/Controls/SnowControl/right"]
+margin_top = 16.0
+margin_right = 158.0
+margin_bottom = 36.0
+flat = true
+color = Color( 1, 1, 1, 1 )
+edit_alpha = false
