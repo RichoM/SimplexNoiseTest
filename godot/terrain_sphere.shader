@@ -15,6 +15,22 @@ uniform float forest_threshold = 0.53;
 uniform float mountain_threshold = 0.6;
 uniform float snow_threshold = 0.65;
 
+vec3 move(vec3 pt, float disp) {
+	float x = pt.x;
+	float y = pt.y;
+	float z = pt.z;
+	
+	float r = sqrt(x*x + y*y + z*z);
+	float i = acos(z/r);
+	float a = atan(y, x);
+	
+	r += disp;
+	pt.x = r * cos(a) * sin(i);
+	pt.y = r * sin(a) * sin(i);
+	pt.z = r * cos(i);
+	return pt;
+}
+
 void vertex() {
 	UV += offset;
 	vec4 noise = texture(noise_sampler, UV);
@@ -35,67 +51,56 @@ void vertex() {
 		disp += .075;
 		disp = min(disp, 0.15);
 	}
-	float x = VERTEX.x;
-	float y = VERTEX.y;
-	float z = VERTEX.z;
 	
-	float r = sqrt(x*x + y*y + z*z);
-	float i = acos(z/r);
-	float a = atan(y, x);
-	
-	r += disp - 1.0;
-	VERTEX.x = r * cos(a) * sin(i);
-	VERTEX.y = r * sin(a) * sin(i);
-	VERTEX.z = r * cos(i);
-	
+	VERTEX = move(VERTEX, disp - 1.0);
 }
 
 
 void fragment() {
-	
 	vec4 noise = texture(noise_sampler, UV);
-	
-	NORMALMAP = texture(noise_normal, UV).rgb;
-	NORMALMAP_DEPTH = 11.5;
-	ROUGHNESS = 0.75;
-	
-	vec4 color = vec4(1.0);
-	if (noise.x > snow_threshold) {
-		color = snow;
-		NORMALMAP_DEPTH = 5.5;
-	} else if (noise.x > mountain_threshold) {
-		color = mountain;
-		METALLIC = 0.5;
-	} else if (noise.x > forest_threshold) {
-		color = forest;
-	} else if (noise.x > beach_threshold) {
-		color = beach;
-		NORMALMAP_DEPTH = 2.5;
-	} else if (noise.x > water_threshold) {
-		color = water;
-		ROUGHNESS = 0.001;
-		EMISSION = vec3(0.01, 0.01, 0.1);
-		METALLIC = 1.0;
+	if (UV.y < noise.x/5.0 || UV.y > 1.0 - noise.x/5.0) {// Poles
 		
-		NORMALMAP = texture(noise_sampler, UV + (TIME * .01)).rgb;
-		NORMALMAP_DEPTH = .5;
-	}
-	ALBEDO = noise.rgb * color.rgb;
-	
-	noise /= 5.0;
-	if (UV.y < noise.x || UV.y > 1.0 - noise.x) 
-	{
 		ALBEDO = snow.rgb * 0.9;
-		//NORMALMAP_DEPTH = 11.0 * (1.0 - pow(abs(sin(3.14159*(UV.y-0.5))), 0.5));
 		if (UV.y > 0.5) {
 			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, (UV.y*0.450));
 		} else {
 			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, ((1.0-UV.y)*0.450));
 		}
-		//NORMALMAP_DEPTH = 0.0;
 		NORMALMAP = texture(noise_normal, UV).rgb;
 		METALLIC = 0.0;
 		ROUGHNESS = 0.0;
 		EMISSION = vec3(.01);
+		
+	} else {
+		vec4 color = vec4(1.0);
+		if (noise.x > water_threshold && noise.x < beach_threshold) { // Water
+			color = water;
+			ROUGHNESS = 0.001;
+			EMISSION = vec3(0.01, 0.01, 0.1);
+			METALLIC = 1.0;
+			
+			NORMALMAP = texture(noise_sampler, UV + (TIME * .01)).rgb;
+			NORMALMAP_DEPTH = .5;
+		} else { // Land
+			
+			NORMALMAP = texture(noise_normal, UV).rgb;
+			NORMALMAP_DEPTH = 11.5;
+			ROUGHNESS = 0.75;
+			if (noise.x > snow_threshold) {
+				color = snow;
+				NORMALMAP_DEPTH = 5.5;
+			} else if (noise.x > mountain_threshold) {
+				color = mountain;
+				METALLIC = 0.5;
+			} else if (noise.x > forest_threshold) {
+				color = forest;
+			} else if (noise.x > beach_threshold) {
+				color = beach;
+				NORMALMAP_DEPTH = 2.5;
+			}
+			
+		}
+		
+		ALBEDO = noise.rgb * color.rgb;
 	}
 }

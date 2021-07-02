@@ -1,0 +1,48 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+
+uniform sampler2D clouds_texture;
+
+varying vec4 noise;
+
+vec3 move(vec3 pt, float disp) {	
+	float x = pt.x;
+	float y = pt.y;
+	float z = pt.z;
+	
+	float r = sqrt(x*x + y*y + z*z);
+	float i = acos(z/r);
+	float a = atan(y, x);
+	
+	r += disp;
+	pt.x = r * cos(a) * sin(i);
+	pt.y = r * sin(a) * sin(i);
+	pt.z = r * cos(i);
+	return pt;
+}
+
+void vertex() {
+	noise = texture(clouds_texture, vec2(UV.y*2.35, UV.x + TIME*-0.015));
+	float disp = noise.r;
+	VERTEX = move(VERTEX, disp * 0.25);
+}
+
+void fragment() {
+	vec3 albedo = noise.rgb;
+	ALBEDO = albedo;
+	ALPHA = smoothstep(0.45, 0.65, albedo.g) * 0.35;
+	EMISSION = vec3(1.0);
+}
+"
+
+[sub_resource type="OpenSimplexNoise" id=2]
+
+[sub_resource type="NoiseTexture" id=3]
+seamless = true
+noise = SubResource( 2 )
+
+[resource]
+shader = SubResource( 1 )
+shader_param/clouds_texture = SubResource( 3 )
