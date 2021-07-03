@@ -2,6 +2,7 @@ extends Control
 
 export var planet : NodePath
 export var seed_input : NodePath
+export var base_color : NodePath
 export var water_threshold : NodePath
 export var water_color : NodePath
 export var beach_threshold : NodePath
@@ -32,6 +33,7 @@ func collect_initial_values():
 	initial_values["mountain.threshold"] = get_terrain_threshold("mountain")
 	initial_values["snow.threshold"] = get_terrain_threshold("snow")
 	
+	initial_values["base.color"] = get_terrain_color("base")
 	initial_values["water.color"] = get_terrain_color("water")
 	initial_values["beach.color"] = get_terrain_color("beach")
 	initial_values["forest.color"] = get_terrain_color("forest")
@@ -47,6 +49,7 @@ func update():
 	(get_node(mountain_threshold) as HSlider).value = get_terrain_threshold("mountain")
 	(get_node(snow_threshold) as HSlider).value = get_terrain_threshold("snow")
 	
+	(get_node(base_color) as ColorPickerButton).color = get_terrain_color("base")
 	(get_node(water_color) as ColorPickerButton).color = get_terrain_color("water")
 	(get_node(beach_color) as ColorPickerButton).color = get_terrain_color("beach")
 	(get_node(forest_color) as ColorPickerButton).color = get_terrain_color("forest")
@@ -127,6 +130,9 @@ func _on_snow_color_changed(color):
 	set_terrain_color("snow", color)
 
 
+func _on_base_color_color_changed(color):
+	set_terrain_color("base", color)
+
 func _on_reset_button_pressed():
 	set_seed(initial_values["seed"])
 	
@@ -141,4 +147,5 @@ func _on_reset_button_pressed():
 	set_terrain_color("forest", initial_values["forest.color"])
 	set_terrain_color("mountain", initial_values["mountain.color"])
 	set_terrain_color("snow", initial_values["snow.color"])
+
 

@@ -1,13 +1,14 @@
 shader_type spatial;
 
 uniform vec2 offset;
+uniform vec4 base : hint_color;
 uniform vec4 water : hint_color;
 uniform vec4 beach : hint_color;
 uniform vec4 forest : hint_color;
 uniform vec4 mountain : hint_color;
 uniform vec4 snow : hint_color;
-uniform sampler2D noise_sampler;
-uniform sampler2D noise_normal;
+uniform sampler2D noise_sampler : hint_albedo;
+uniform sampler2D noise_normal : hint_normal;
 
 uniform float water_threshold = 0.0;
 uniform float beach_threshold = 0.5;
@@ -45,7 +46,7 @@ void vertex() {
 	} else if (noise.r > beach_threshold) {
 		disp = noise.r * 0.05;
 	}
-	disp = min(disp, 0.75);
+	
 	
 	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
 		//disp = 0.015 * UV.y + 0.055;
@@ -73,7 +74,7 @@ void fragment() {
 		EMISSION = vec3(.01);
 		
 	} else {
-		vec4 color = vec4(1.0);
+		vec4 color = base;
 		if (noise.x > water_threshold && noise.x < beach_threshold) { // Water
 			color = water;
 			ROUGHNESS = 0.001;
