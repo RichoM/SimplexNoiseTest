@@ -71,18 +71,11 @@ void vertex() {
 void fragment() {
 	vec4 noise = texture(noise_sampler, UV);
 	if (UV.y < noise.x * poles_threshold || UV.y > 1.0 - noise.x * poles_threshold) {// Poles
-		
-		ALBEDO = poles.rgb;
-		if (UV.y > 0.5) {
-			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, (UV.y*0.450));
-		} else {
-			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, ((1.0-UV.y)*0.450));
-		}
 		NORMALMAP = texture(noise_normal, UV).rgb;
-		METALLIC = 0.0;
-		ROUGHNESS = 0.0;
-		EMISSION = vec3(.01);
-		
+		NORMALMAP_DEPTH = 5.5;
+		ROUGHNESS = 0.75;
+		EMISSION = vec3(0.2);
+		ALBEDO = noise.rgb * poles.rgb ;
 	} else {
 		vec4 color = base;
 		if (noise.x > water_threshold && noise.x < beach_threshold) { // Water
@@ -101,6 +94,7 @@ void fragment() {
 			if (noise.x > snow_threshold) {
 				color = snow;
 				NORMALMAP_DEPTH = 5.5;
+				EMISSION = vec3(0.2);
 			} else if (noise.x > mountain_threshold) {
 				color = mountain;
 				METALLIC = 0.5;
