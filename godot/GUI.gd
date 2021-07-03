@@ -14,6 +14,8 @@ export var mountain_threshold : NodePath
 export var mountain_color : NodePath
 export var snow_threshold : NodePath
 export var snow_color : NodePath
+export var poles_threshold : NodePath
+export var poles_color : NodePath
 
 var initial_values = {}
 
@@ -34,6 +36,7 @@ func collect_initial_values():
 	initial_values["forest.threshold"] = get_terrain_threshold("forest")
 	initial_values["mountain.threshold"] = get_terrain_threshold("mountain")
 	initial_values["snow.threshold"] = get_terrain_threshold("snow")
+	initial_values["poles.threshold"] = get_terrain_threshold("poles")
 	
 	initial_values["base.color"] = get_terrain_color("base")
 	initial_values["water.color"] = get_terrain_color("water")
@@ -41,6 +44,7 @@ func collect_initial_values():
 	initial_values["forest.color"] = get_terrain_color("forest")
 	initial_values["mountain.color"] = get_terrain_color("mountain")
 	initial_values["snow.color"] = get_terrain_color("snow")
+	initial_values["poles.color"] = get_terrain_color("poles")
 	
 func update():
 	(get_node(seed_input) as LineEdit).text = str(get_seed())
@@ -51,6 +55,7 @@ func update():
 	(get_node(forest_threshold) as HSlider).value = get_terrain_threshold("forest")
 	(get_node(mountain_threshold) as HSlider).value = get_terrain_threshold("mountain")
 	(get_node(snow_threshold) as HSlider).value = get_terrain_threshold("snow")
+	(get_node(poles_threshold) as HSlider).value = get_terrain_threshold("poles")
 	
 	(get_node(base_color) as ColorPickerButton).color = get_terrain_color("base")
 	(get_node(water_color) as ColorPickerButton).color = get_terrain_color("water")
@@ -58,6 +63,7 @@ func update():
 	(get_node(forest_color) as ColorPickerButton).color = get_terrain_color("forest")
 	(get_node(mountain_color) as ColorPickerButton).color = get_terrain_color("mountain")
 	(get_node(snow_color) as ColorPickerButton).color = get_terrain_color("snow")
+	(get_node(poles_color) as ColorPickerButton).color = get_terrain_color("poles")
 
 func get_seed():
 	var noise_sampler = planet_material.get("shader_param/noise_sampler")
@@ -88,7 +94,26 @@ func get_terrain_color(terrain : String):
 
 func set_terrain_color(terrain : String, value):
 	planet_material.set("shader_param/" + terrain, value)
+
+
+func _on_reset_button_pressed():
+	set_seed(initial_values["seed"])
+	set_elevation(initial_values["elevation"])
 	
+	set_terrain_threshold("water", initial_values["water.threshold"])
+	set_terrain_threshold("beach", initial_values["beach.threshold"])
+	set_terrain_threshold("forest", initial_values["forest.threshold"])
+	set_terrain_threshold("mountain", initial_values["mountain.threshold"])
+	set_terrain_threshold("snow", initial_values["snow.threshold"])
+	set_terrain_threshold("poles", initial_values["poles.threshold"])
+	
+	set_terrain_color("base", initial_values["base.color"])
+	set_terrain_color("water", initial_values["water.color"])
+	set_terrain_color("beach", initial_values["beach.color"])
+	set_terrain_color("forest", initial_values["forest.color"])
+	set_terrain_color("mountain", initial_values["mountain.color"])
+	set_terrain_color("snow", initial_values["snow.color"])
+	set_terrain_color("poles", initial_values["poles.color"])
 	
 func _on_seed_text_entered(new_text):
 	print(new_text as int)
@@ -107,6 +132,11 @@ func _on_seed_focus_exited():
 
 func _on_elevation_slider_value_changed(value):
 	set_elevation(value)
+	
+
+
+func _on_base_color_color_changed(color):
+	set_terrain_color("base", color)
 	
 
 func _on_water_threshold_value_changed(value):
@@ -142,25 +172,10 @@ func _on_snow_threshold_value_changed(value):
 
 func _on_snow_color_changed(color):
 	set_terrain_color("snow", color)
-
-
-func _on_base_color_color_changed(color):
-	set_terrain_color("base", color)
-
-func _on_reset_button_pressed():
-	set_seed(initial_values["seed"])
 	
-	set_terrain_threshold("water", initial_values["water.threshold"])
-	set_terrain_threshold("beach", initial_values["beach.threshold"])
-	set_terrain_threshold("forest", initial_values["forest.threshold"])
-	set_terrain_threshold("mountain", initial_values["mountain.threshold"])
-	set_terrain_threshold("snow", initial_values["snow.threshold"])
-	
-	set_terrain_color("water", initial_values["water.color"])
-	set_terrain_color("beach", initial_values["beach.color"])
-	set_terrain_color("forest", initial_values["forest.color"])
-	set_terrain_color("mountain", initial_values["mountain.color"])
-	set_terrain_color("snow", initial_values["snow.color"])
 
+func _on_poles_threshold_value_changed(value):
+	set_terrain_threshold("poles", value)
 
-
+func _on_poles_color_changed(color):
+	set_terrain_color("poles", color)

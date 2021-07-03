@@ -10,6 +10,7 @@ uniform vec4 beach : hint_color;
 uniform vec4 forest : hint_color;
 uniform vec4 mountain : hint_color;
 uniform vec4 snow : hint_color;
+uniform vec4 poles : hint_color;
 uniform sampler2D noise_sampler : hint_albedo;
 uniform sampler2D noise_normal : hint_normal;
 
@@ -18,6 +19,7 @@ uniform float beach_threshold = 0.5;
 uniform float forest_threshold = 0.53;
 uniform float mountain_threshold = 0.6;
 uniform float snow_threshold = 0.65;
+uniform float poles_threshold = 0.2;
 
 vec3 move(vec3 pt, float disp) {
 	float x = pt.x;
@@ -55,7 +57,7 @@ void vertex() {
 	}
 	
 	
-	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
+	if (UV.y < noise.x * poles_threshold || UV.y > 1.0 - noise.x * poles_threshold) {
 		//disp = 0.015 * UV.y + 0.055;
 		disp += .075;
 		disp = min(disp, 0.15);
@@ -68,9 +70,9 @@ void vertex() {
 
 void fragment() {
 	vec4 noise = texture(noise_sampler, UV);
-	if (UV.y < noise.x/5.0 || UV.y > 1.0 - noise.x/5.0) {// Poles
+	if (UV.y < noise.x * poles_threshold || UV.y > 1.0 - noise.x * poles_threshold) {// Poles
 		
-		ALBEDO = snow.rgb * 0.9;
+		ALBEDO = poles.rgb;
 		if (UV.y > 0.5) {
 			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, (UV.y*0.450));
 		} else {
