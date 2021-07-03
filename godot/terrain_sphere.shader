@@ -1,6 +1,9 @@
 shader_type spatial;
 
 uniform vec2 offset;
+
+uniform float elevation;
+
 uniform vec4 base : hint_color;
 uniform vec4 water : hint_color;
 uniform vec4 beach : hint_color;
@@ -45,6 +48,10 @@ void vertex() {
 		disp = noise.r * 0.1;
 	} else if (noise.r > beach_threshold) {
 		disp = noise.r * 0.05;
+	} else if (noise.r > water_threshold) {
+		disp = noise.r * 0.0;
+	} else {
+		disp = noise.r * -0.1;
 	}
 	
 	
@@ -54,6 +61,7 @@ void vertex() {
 		disp = min(disp, 0.15);
 	}
 	
+	disp *= elevation;
 	VERTEX = move(VERTEX, disp);
 }
 

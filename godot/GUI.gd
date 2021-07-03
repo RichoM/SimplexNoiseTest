@@ -2,6 +2,7 @@ extends Control
 
 export var planet : NodePath
 export var seed_input : NodePath
+export var elevation_slider : NodePath
 export var base_color : NodePath
 export var water_threshold : NodePath
 export var water_color : NodePath
@@ -26,6 +27,7 @@ func _ready():
 	
 func collect_initial_values():
 	initial_values["seed"] = get_seed()
+	initial_values["elevation"] = get_elevation()
 	
 	initial_values["water.threshold"] = get_terrain_threshold("water")
 	initial_values["beach.threshold"] = get_terrain_threshold("beach")
@@ -42,6 +44,7 @@ func collect_initial_values():
 	
 func update():
 	(get_node(seed_input) as LineEdit).text = str(get_seed())
+	(get_node(elevation_slider) as HSlider).value = get_elevation()
 	
 	(get_node(water_threshold) as HSlider).value = get_terrain_threshold("water")
 	(get_node(beach_threshold) as HSlider).value = get_terrain_threshold("beach")
@@ -66,6 +69,12 @@ func set_seed(value):
 	var noise = noise_sampler.get("noise")
 	noise.set("seed", value)
 	
+	
+func get_elevation():
+	return planet_material.get("shader_param/elevation")
+
+func set_elevation(value):
+	planet_material.set("shader_param/elevation", value)
 
 func get_terrain_threshold(terrain : String):
 	return planet_material.get("shader_param/" + terrain + "_threshold")
@@ -93,6 +102,11 @@ func _on_seed_focus_exited():
 	if value != get_seed():
 		set_seed(value)
 	(get_node(seed_input) as LineEdit).text = str(value)
+	
+	
+
+func _on_elevation_slider_value_changed(value):
+	set_elevation(value)
 	
 
 func _on_water_threshold_value_changed(value):
@@ -147,5 +161,6 @@ func _on_reset_button_pressed():
 	set_terrain_color("forest", initial_values["forest.color"])
 	set_terrain_color("mountain", initial_values["mountain.color"])
 	set_terrain_color("snow", initial_values["snow.color"])
+
 
 
