@@ -24,7 +24,7 @@ vec3 move(vec3 pt, float disp) {
 }
 
 void vertex() {
-	noise = texture(clouds_texture, vec2(UV.y*2.35, UV.x + TIME*-0.015));
+	noise = texture(clouds_texture, vec2(UV.y*2.35, UV.x + TIME*-0.045));
 	float disp = noise.r;
 	VERTEX = move(VERTEX, disp * 0.25);
 }

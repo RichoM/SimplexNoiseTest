@@ -12,8 +12,8 @@ subdivide_width = 100
 subdivide_depth = 100
 
 [sub_resource type="SphereMesh" id=2]
-radius = 4.0
-height = 8.0
+radius = 3.0
+height = 6.0
 radial_segments = 128
 rings = 64
 

@@ -37,14 +37,15 @@ void vertex() {
 	
 	float disp = 0.0;
 	if (noise.r > snow_threshold) {
-		disp = (noise.r - beach_threshold) * 1.7;
+		disp = noise.r * 0.3;
 	} else if (noise.r > mountain_threshold) {
-		disp = (noise.r - beach_threshold) * 1.25;
+		disp = noise.r * 0.2;
 	} else if (noise.r > forest_threshold) {
-		disp = (noise.r - beach_threshold) * 1.15;
+		disp = noise.r * 0.1;
 	} else if (noise.r > beach_threshold) {
-		disp = (noise.r - beach_threshold) * 1.05;
+		disp = noise.r * 0.05;
 	}
+	disp = min(disp, 0.75);
 	
 	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
 		//disp = 0.015 * UV.y + 0.055;
@@ -52,7 +53,7 @@ void vertex() {
 		disp = min(disp, 0.15);
 	}
 	
-	VERTEX = move(VERTEX, disp - 1.0);
+	VERTEX = move(VERTEX, disp);
 }
 
 
