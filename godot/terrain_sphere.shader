@@ -1,19 +1,25 @@
 shader_type spatial;
 
 uniform vec2 offset;
+
+uniform float elevation;
+
+uniform vec4 base : hint_color;
 uniform vec4 water : hint_color;
 uniform vec4 beach : hint_color;
 uniform vec4 forest : hint_color;
 uniform vec4 mountain : hint_color;
 uniform vec4 snow : hint_color;
-uniform sampler2D noise_sampler;
-uniform sampler2D noise_normal;
+uniform vec4 poles : hint_color;
+uniform sampler2D noise_sampler : hint_albedo;
+uniform sampler2D noise_normal : hint_normal;
 
 uniform float water_threshold = 0.0;
 uniform float beach_threshold = 0.5;
 uniform float forest_threshold = 0.53;
 uniform float mountain_threshold = 0.6;
 uniform float snow_threshold = 0.65;
+uniform float poles_threshold = 0.2;
 
 vec3 move(vec3 pt, float disp) {
 	float x = pt.x;
@@ -44,36 +50,34 @@ void vertex() {
 		disp = noise.r * 0.1;
 	} else if (noise.r > beach_threshold) {
 		disp = noise.r * 0.05;
+	} else if (noise.r > water_threshold) {
+		disp = noise.r * 0.0;
+	} else {
+		disp = noise.r * -0.1;
 	}
-	disp = min(disp, 0.75);
 	
-	if (UV.y < noise.x / 5.0 || UV.y > 1.0 - noise.x / 5.0) {
+	
+	if (UV.y < noise.x * poles_threshold || UV.y > 1.0 - noise.x * poles_threshold) {
 		//disp = 0.015 * UV.y + 0.055;
 		disp += .075;
 		disp = min(disp, 0.15);
 	}
 	
+	disp *= elevation;
 	VERTEX = move(VERTEX, disp);
 }
 
 
 void fragment() {
 	vec4 noise = texture(noise_sampler, UV);
-	if (UV.y < noise.x/5.0 || UV.y > 1.0 - noise.x/5.0) {// Poles
-		
-		ALBEDO = snow.rgb * 0.9;
-		if (UV.y > 0.5) {
-			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, (UV.y*0.450));
-		} else {
-			NORMALMAP_DEPTH = 11.0 * smoothstep(0.25, 0.75, ((1.0-UV.y)*0.450));
-		}
+	if (UV.y < noise.x * poles_threshold || UV.y > 1.0 - noise.x * poles_threshold) {// Poles
 		NORMALMAP = texture(noise_normal, UV).rgb;
-		METALLIC = 0.0;
-		ROUGHNESS = 0.0;
-		EMISSION = vec3(.01);
-		
+		NORMALMAP_DEPTH = 5.5;
+		ROUGHNESS = 0.75;
+		EMISSION = vec3(0.2);
+		ALBEDO = noise.rgb * poles.rgb ;
 	} else {
-		vec4 color = vec4(1.0);
+		vec4 color = base;
 		if (noise.x > water_threshold && noise.x < beach_threshold) { // Water
 			color = water;
 			ROUGHNESS = 0.001;
@@ -90,6 +94,7 @@ void fragment() {
 			if (noise.x > snow_threshold) {
 				color = snow;
 				NORMALMAP_DEPTH = 5.5;
+				EMISSION = vec3(0.2);
 			} else if (noise.x > mountain_threshold) {
 				color = mountain;
 				METALLIC = 0.5;
