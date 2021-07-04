@@ -300,6 +300,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Base:"
 align = 2
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
