@@ -28,6 +28,7 @@ var planet_material : Material
 var noise : OpenSimplexNoise
 
 func _ready():
+	randomize()
 	planet_material = get_node(planet).get_surface_material(0)
 	noise = planet_material.get("shader_param/noise_sampler").get("noise")
 	collect_initial_values()
@@ -106,6 +107,32 @@ func get_terrain_color(terrain : String):
 func set_terrain_color(terrain : String, value):
 	planet_material.set("shader_param/" + terrain, value)
 
+func random_color():
+	return Color.from_hsv(randf(), randf(), randf(), 1.0)
+	
+func _on_randomize_button_pressed():
+	set_noise_param("seed", randi())
+	set_noise_param("octaves", rand_range(1, 6) as int)
+	set_noise_param("period", rand_range(0.1, 256))
+	set_noise_param("persistence", randf())
+	set_noise_param("lacunarity", rand_range(0.1, 4))
+	set_elevation(rand_range(0.1, 7))
+	
+	set_terrain_threshold("water", randf())
+	set_terrain_threshold("beach", randf())
+	set_terrain_threshold("forest", randf())
+	set_terrain_threshold("mountain", randf())
+	set_terrain_threshold("snow", randf())
+	set_terrain_threshold("poles", randf())
+	
+	set_terrain_color("base", random_color())
+	set_terrain_color("water", random_color())
+	set_terrain_color("beach", random_color())
+	set_terrain_color("forest", random_color())
+	set_terrain_color("mountain", random_color())
+	set_terrain_color("snow", random_color())
+	set_terrain_color("poles", random_color())
+	update()
 
 func _on_reset_button_pressed():
 	set_noise_param("seed", initial_values["seed"])
@@ -146,7 +173,6 @@ func _on_seed_focus_exited():
 
 func _on_elevation_slider_value_changed(value):
 	set_elevation(value)
-	
 
 
 func _on_base_color_color_changed(color):
@@ -240,4 +266,5 @@ func _on_lacunarity_focus_exited():
 	var value = (get_node(lacunarity_input) as LineEdit).text as float
 	set_noise_param("lacunarity", value)
 	(get_node(lacunarity_input) as LineEdit).text = str(value)
+
 
