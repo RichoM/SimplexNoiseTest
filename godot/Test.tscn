@@ -102,7 +102,7 @@ material/0 = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, 0.791981, 0.610546, 0, -0.610546, 0.791981, -0.00122511, 1.21673, -0.0124943 )
 
 [node name="littleplanet" type="MeshInstance" parent="."]
-transform = Transform( -0.801711, 0.309686, 0.511227, -0.320537, -0.944676, 0.0695867, 0.504494, -0.108079, 0.856624, 0, 10, 0 )
+transform = Transform( -0.801711, 0.309686, 0.511227, -0.155811, -0.934017, 0.321455, 0.577045, 0.178059, 0.797065, 0, 10, 0 )
 mesh = SubResource( 2 )
 material/0 = ExtResource( 2 )
 script = ExtResource( 3 )

@@ -1,7 +1,12 @@
 extends Control
 
+# TODO(Richo): All this code sucks, I should build the GUI dynamically...
 export var planet : NodePath
 export var seed_input : NodePath
+export var octaves_input : NodePath
+export var period_input : NodePath
+export var persistence_input : NodePath
+export var lacunarity_input : NodePath
 export var elevation_slider : NodePath
 export var base_color : NodePath
 export var water_threshold : NodePath
@@ -19,16 +24,21 @@ export var poles_color : NodePath
 
 var initial_values = {}
 
-
 var planet_material : Material
+var noise : OpenSimplexNoise
 
 func _ready():
 	planet_material = get_node(planet).get_surface_material(0)
+	noise = planet_material.get("shader_param/noise_sampler").get("noise")
 	collect_initial_values()
 	update()
 	
 func collect_initial_values():
-	initial_values["seed"] = get_seed()
+	initial_values["seed"] = get_noise_param("seed")
+	initial_values["octaves"] = get_noise_param("octaves")
+	initial_values["period"] = get_noise_param("period")
+	initial_values["persistence"] = get_noise_param("persistence")
+	initial_values["lacunarity"] = get_noise_param("lacunarity")
 	initial_values["elevation"] = get_elevation()
 	
 	initial_values["water.threshold"] = get_terrain_threshold("water")
@@ -47,7 +57,11 @@ func collect_initial_values():
 	initial_values["poles.color"] = get_terrain_color("poles")
 	
 func update():
-	(get_node(seed_input) as LineEdit).text = str(get_seed())
+	(get_node(seed_input) as LineEdit).text = str(get_noise_param("seed"))
+	(get_node(octaves_input) as LineEdit).text = str(get_noise_param("octaves"))
+	(get_node(period_input) as LineEdit).text = str(get_noise_param("period"))
+	(get_node(persistence_input) as LineEdit).text = str(get_noise_param("persistence"))
+	(get_node(lacunarity_input) as LineEdit).text = str(get_noise_param("lacunarity"))
 	(get_node(elevation_slider) as HSlider).value = get_elevation()
 	
 	(get_node(water_threshold) as HSlider).value = get_terrain_threshold("water")
@@ -65,15 +79,12 @@ func update():
 	(get_node(snow_color) as ColorPickerButton).color = get_terrain_color("snow")
 	(get_node(poles_color) as ColorPickerButton).color = get_terrain_color("poles")
 
-func get_seed():
-	var noise_sampler = planet_material.get("shader_param/noise_sampler")
-	var noise = noise_sampler.get("noise")
-	return noise.get("seed")
+func get_noise_param(name : String):
+	return noise.get(name)
 	
-func set_seed(value):	
-	var noise_sampler = planet_material.get("shader_param/noise_sampler")
-	var noise = noise_sampler.get("noise")
-	noise.set("seed", value)
+func set_noise_param(name : String, value):
+	if value != noise.get(name):
+		noise.set(name, value)
 	
 	
 func get_elevation():
@@ -97,7 +108,11 @@ func set_terrain_color(terrain : String, value):
 
 
 func _on_reset_button_pressed():
-	set_seed(initial_values["seed"])
+	set_noise_param("seed", initial_values["seed"])
+	set_noise_param("octaves", initial_values["octaves"])
+	set_noise_param("period", initial_values["period"])
+	set_noise_param("persistence", initial_values["persistence"])
+	set_noise_param("lacunarity", initial_values["lacunarity"])
 	set_elevation(initial_values["elevation"])
 	
 	set_terrain_threshold("water", initial_values["water.threshold"])
@@ -116,16 +131,14 @@ func _on_reset_button_pressed():
 	set_terrain_color("poles", initial_values["poles.color"])
 	
 func _on_seed_text_entered(new_text):
-	print(new_text as int)
 	var value = new_text as int
-	set_seed(value)
+	set_noise_param("seed", value)
 	(get_node(seed_input) as LineEdit).text = str(value)
 
 
 func _on_seed_focus_exited():
 	var value = (get_node(seed_input) as LineEdit).text as int
-	if value != get_seed():
-		set_seed(value)
+	set_noise_param("seed", value)
 	(get_node(seed_input) as LineEdit).text = str(value)
 	
 	
@@ -179,3 +192,51 @@ func _on_poles_threshold_value_changed(value):
 
 func _on_poles_color_changed(color):
 	set_terrain_color("poles", color)
+
+
+func _on_octaves_text_entered(new_text):
+	var value = new_text as int
+	if value < 1: value = 1
+	elif value > 8: value = 8
+	set_noise_param("octaves", value)
+	(get_node(octaves_input) as LineEdit).text = str(value)
+
+func _on_octaves_focus_exited():
+	var value = (get_node(octaves_input) as LineEdit).text as int
+	if value < 1: value = 1
+	elif value > 8: value = 8
+	set_noise_param("octaves", value)
+	(get_node(octaves_input) as LineEdit).text = str(value)
+
+func _on_period_text_entered(new_text):
+	var value = new_text as float
+	set_noise_param("period", value)
+	(get_node(period_input) as LineEdit).text = str(value)
+
+func _on_period_focus_exited():
+	var value = (get_node(period_input) as LineEdit).text as float
+	set_noise_param("period", value)
+	(get_node(period_input) as LineEdit).text = str(value)
+
+
+func _on_persistence_text_entered(new_text):
+	var value = new_text as float
+	set_noise_param("persistence", value)
+	(get_node(persistence_input) as LineEdit).text = str(value)
+
+func _on_persistence_focus_exited():
+	var value = (get_node(persistence_input) as LineEdit).text as float
+	set_noise_param("persistence", value)
+	(get_node(persistence_input) as LineEdit).text = str(value)
+
+
+func _on_lacunarity_text_entered(new_text):
+	var value = new_text as float
+	set_noise_param("lacunarity", value)
+	(get_node(lacunarity_input) as LineEdit).text = str(value)
+
+func _on_lacunarity_focus_exited():
+	var value = (get_node(lacunarity_input) as LineEdit).text as float
+	set_noise_param("lacunarity", value)
+	(get_node(lacunarity_input) as LineEdit).text = str(value)
+
