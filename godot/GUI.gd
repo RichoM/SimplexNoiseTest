@@ -129,6 +129,7 @@ func _on_reset_button_pressed():
 	set_terrain_color("mountain", initial_values["mountain.color"])
 	set_terrain_color("snow", initial_values["snow.color"])
 	set_terrain_color("poles", initial_values["poles.color"])
+	update()
 	
 func _on_seed_text_entered(new_text):
 	var value = new_text as int
